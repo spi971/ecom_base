@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import PageHeader from "../_components/PageHeader";
+import ProductsTable from "../_components/ProductsTable";
 
 export default function AdminProductsPage() {
   return (
@@ -11,6 +12,7 @@ export default function AdminProductsPage() {
           <Link href="/admin/products/new">Add Product</Link>
         </Button>
       </div>
+      <ProductsTable/>
     </>
   );
 }
