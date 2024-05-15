@@ -1,6 +1,5 @@
 import DashboardCard from "@/components/DashboarCard";
 import { formatCurrency, formatNumber } from "@/lib/formatters";
-import db from "../db/db";
 import { getProductData } from "../db/product";
 import { getSalesData } from "../db/sales";
 import { getUserData } from "../db/user";
