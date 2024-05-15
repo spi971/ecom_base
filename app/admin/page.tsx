@@ -1,36 +1,39 @@
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import DashboardCard from "@/components/DashboarCard";
+import { formatCurrency, formatNumber } from "@/lib/formatters";
+import db from "../db/db";
+import { getProductData } from "../db/product";
+import { getSalesData } from "../db/sales";
+import { getUserData } from "../db/user";
 
-export default function page() {
+
+export default async function page() {
+  const [salesData, customersData, productData] = await Promise.all([
+    getSalesData(),
+    getUserData(),
+    getProductData(),
+  ]);
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-      <DashboardCard title='Sales' subtitle='text' body='text' />
-      <DashboardCard title='Products' subtitle='text' body='text' />
-      <DashboardCard title='Customers' subtitle='text' body='text' />
-    </div>
-  );
-}
+      <DashboardCard
+        title='Sales'
+        subtitle={`${formatNumber(salesData.numberOfSales)} Ordrers`}
+        body={formatCurrency(salesData.amount)}
+      />
 
-type DashboardCardProps = {
-  title: string;
-  subtitle: string;
-  body: string;
-};
-function DashboardCard({ title, subtitle, body }: DashboardCardProps) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{subtitle}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>{body}</p>
-      </CardContent>
-    </Card>
+      <DashboardCard
+        title='Customers'
+        subtitle={`${formatCurrency(
+          customersData.averageValuePerUser
+        )} Average Value`}
+        body={formatNumber(customersData.userCount)}
+      />
+
+      <DashboardCard
+        title='Active Products'
+        subtitle={`${formatNumber(productData.inactiveProducts)} Inactive Products`}
+        body={`${formatNumber(productData.activeProducts)}`}
+      />
+    </div>
   );
 }
