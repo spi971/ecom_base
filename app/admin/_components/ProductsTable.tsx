@@ -3,7 +3,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   Table,
@@ -16,6 +17,10 @@ import {
 import { formatCurrency, formatNumber } from "@/lib/formatters";
 import { CheckCircle2, MoreVertical, XCircle } from "lucide-react";
 import Link from "next/link";
+import {
+  ActveToggleDropdownItem,
+  DeleteDropdownItem,
+} from "../products/_components/ProductActions";
 
 export default async function ProductsTable() {
   const products = await db.product.findMany({
@@ -57,7 +62,7 @@ export default async function ProductsTable() {
               ) : (
                 <>
                   <span className='sr-only'>Unavailable</span>
-                  <XCircle />
+                  <XCircle className="stroke-destructive"/>
                 </>
               )}
             </TableCell>
@@ -72,12 +77,24 @@ export default async function ProductsTable() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem asChild>
-                    <a download href={`/admin/products/${product.id}/download`}>Download</a>
+                    <a download href={`/admin/products/${product.id}/download`}>
+                      Download
+                    </a>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href={`/admin/products/${product.id}/edit`}>Edit</Link>
+                    <Link href={`/admin/products/${product.id}/edit`}>
+                      Edit
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Delete</DropdownMenuItem>
+                  <ActveToggleDropdownItem
+                    id={product.id}
+                    isAvailableForPurchase={product.isAvailableForPurchase}
+                  />
+                  <DropdownMenuSeparator/>
+                  <DeleteDropdownItem
+                    id={product.id}
+                    disabled={product._count.orders > 0}
+                  />
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>
