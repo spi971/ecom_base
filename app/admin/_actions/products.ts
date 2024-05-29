@@ -1,8 +1,8 @@
 "use server"
 
 import db from "@/app/db/db";
-import fs from "fs/promises";
 import { notFound, redirect } from "next/navigation";
+import fs from "node:fs/promises";
 import { z } from "zod";
 
 const fileSchema = z.instanceof(File, { message: "Required" });
